@@ -127,39 +127,89 @@ func PipelineProcessorConvertToString() *PipelineProcessor {
 	pp := NewPipelineProcessor(PipelineProcessorKeyConvertToString)
 
 	pp.OnSimpleNode = func(ctx context.Context, w io.Writer, node any) (any, error) {
+		if node == nil {
+			return nil, nil
+		}
+
+		parseString := func(s string) (any, error) {
+			if len(s) == 0 {
+				return nil, nil
+			}
+			return s, nil
+		}
+
+		parseInt64 := func(i int64) (any, error) {
+			return strconv.FormatInt(i, base10), nil
+		}
+
+		parseUint64 := func(i uint64) (any, error) {
+			return strconv.FormatUint(i, base10), nil
+		}
+
+		parseFloat64 := func(f float64) (any, error) {
+			return strconv.FormatFloat(f, 'f', -1, bit64), nil
+		}
+
 		switch v := node.(type) {
 		case nil:
 			return nil, nil
-		case string:
-			if v == "" {
-				return nil, nil
-			}
 
-			return v, nil
+		case string:
+			return parseString(v)
+		case *string:
+			return parseString(*v)
+
 		case int:
-			return strconv.Itoa(v), nil
-		case int64:
-			return strconv.FormatInt(v, base10), nil
-		case uint64:
-			return strconv.FormatUint(v, base10), nil
-		case float64:
-			return strconv.FormatFloat(v, 'f', -1, bit64), nil
-		case float32:
-			return strconv.FormatFloat(float64(v), 'f', -1, bit32), nil
+			return parseInt64(int64(v))
+		case *int:
+			return parseInt64(int64(*v))
 		case int8:
-			return strconv.FormatInt(int64(v), base10), nil
+			return parseInt64(int64(v))
+		case *int8:
+			return parseInt64(int64(*v))
 		case int16:
-			return strconv.FormatInt(int64(v), base10), nil
+			return parseInt64(int64(v))
+		case *int16:
+			return parseInt64(int64(*v))
 		case int32:
-			return strconv.FormatInt(int64(v), base10), nil
+			return parseInt64(int64(v))
+		case *int32:
+			return parseInt64(int64(*v))
+		case int64:
+			return parseInt64(v)
+		case *int64:
+			return parseInt64(*v)
+
 		case uint:
-			return strconv.FormatUint(uint64(v), base10), nil
+			return parseUint64(uint64(v))
+		case *uint:
+			return parseUint64(uint64(*v))
 		case uint8:
-			return strconv.FormatUint(uint64(v), base10), nil
+			return parseUint64(uint64(v))
+		case *uint8:
+			return parseUint64(uint64(*v))
 		case uint16:
-			return strconv.FormatUint(uint64(v), base10), nil
+			return parseUint64(uint64(v))
+		case *uint16:
+			return parseUint64(uint64(*v))
 		case uint32:
-			return strconv.FormatUint(uint64(v), base10), nil
+			return parseUint64(uint64(v))
+		case *uint32:
+			return parseUint64(uint64(*v))
+		case uint64:
+			return parseUint64(v)
+		case *uint64:
+			return parseUint64(*v)
+
+		case float32:
+			return parseFloat64(float64(v))
+		case *float32:
+			return parseFloat64(float64(*v))
+		case float64:
+			return parseFloat64(v)
+		case *float64:
+			return parseFloat64(*v)
+
 		// HTML need to be a pointer to allow for msgpack to keep its type
 		case HTML:
 			return &v, nil

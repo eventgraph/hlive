@@ -355,22 +355,27 @@ func diffTreeNodeTypeMatch(oldNode, newNode any) bool {
 	switch oldNode.(type) {
 	case *NodeGroup:
 		_, ok := newNode.(*NodeGroup)
-
 		return ok
+
 	case string:
 		_, ok := newNode.(string)
-
 		return ok
+
+	case *string:
+		_, ok := newNode.(*string)
+		return ok
+
 	case *HTML:
 		_, ok := newNode.(*HTML)
-
 		return ok
+
 	case Tagger:
 		_, ok := newNode.(Tagger)
-
 		return ok
+
 	case nil:
 		return false
+
 	default:
 		panic(fmt.Sprintf("unexpected type: %#v", oldNode))
 	}

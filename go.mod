@@ -24,6 +24,8 @@ require (
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/tdewolff/parse/v2 v2.6.1 // indirect
 	github.com/vmihailenco/tagparser/v2 v2.0.0 // indirect
-	golang.org/x/sys v0.0.0-20220722155257-8c9f86f7a55f // indirect
+	golang.org/x/exp v0.0.0-20230127140709-cafedaf64729
+	golang.org/x/sys v0.1.0 // indirect
 	gopkg.in/square/go-jose.v2 v2.6.0 // indirect
+	k8s.io/apimachinery v0.26.1
 )

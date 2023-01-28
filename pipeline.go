@@ -289,8 +289,9 @@ func (p *Pipeline) walk(ctx context.Context, w io.Writer, node any) (any, error)
 		return nil, nil
 	// Single Node,
 	// Not a Tagger
-	case string, HTML,
-		int, int8, int16, int32, int64, uint, uint8, uint16, uint32, uint64, float32, float64:
+	case HTML,
+		string, int, int8, int16, int32, int64, uint, uint8, uint16, uint32, uint64, float32, float64,
+		*string, *int, *int8, *int16, *int32, *int64, *uint, *uint8, *uint16, *uint32, *uint64, *float32, *float64:
 
 		return p.onSimpleNode(ctx, w, node)
 	// All Taggers wil be converted to a Tag

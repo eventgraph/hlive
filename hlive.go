@@ -112,11 +112,27 @@ func NewLockBox[V any](val V) *LockBox[V] {
 func IsNode(node any) bool {
 	switch node.(type) {
 	// TODO: Need *HTML for encoding, maybe new read only Tag will help
-	case nil, string, HTML, *HTML, Tagger,
-		[]any, *NodeGroup, []*Component, []*Tag, []Componenter, []Tagger, []UniqueTagger,
-		int, int8, int16, int32, int64, uint, uint8, uint16, uint32, uint64, float32, float64,
-		NodeBoxer, LockBoxer:
+	case HTML, *HTML:
 		return true
+
+	// primitives
+	case nil,
+		string, int, int8, int16, int32, int64, uint, uint8, uint16, uint32, uint64, float32, float64,
+		*string, *int, *int8, *int16, *int32, *int64, *uint, *uint8, *uint16, *uint32, *uint64, *float32, *float64:
+		return true
+
+	// boxers
+	case NodeBoxer, LockBoxer:
+		return true
+
+	// Taggers
+	case Tagger, []Tagger, []UniqueTagger:
+		return true
+
+	// Internals:
+	case *NodeGroup, []any, []*Component, []*Tag, []Componenter:
+		return true
+
 	default:
 		return false
 	}
